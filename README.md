@@ -1,363 +1,342 @@
-Smart Parking Slot Monitoring and Vehicle Detection System Using CAN Protocol
-1. Project Overview
+# 🚗 Smart Parking Slot Monitoring and Vehicle Detection System Using CAN Protocol
 
-The Smart Parking Slot Monitoring and Vehicle Detection System is an embedded system designed to monitor parking-slot occupancy and manage vehicle entry and exit automatically. The system uses LPC2129 ARM7 microcontrollers, IR sensors, CAN communication, an RTC, LCD display, and a servo motor.
+## 📌 Project Overview
 
-Three nodes are used to monitor different parking areas. Each node detects whether a parking slot is occupied or free using IR sensors and sends the status to the main monitoring node through the CAN bus. The system calculates the available parking spaces and displays the information on an LCD. A servo motor is used to control the entrance gate based on parking availability.
-2. Objective
+The **Smart Parking Slot Monitoring and Vehicle Detection System Using CAN Protocol** is an embedded system-based project designed to automate parking slot monitoring and vehicle detection using multiple Electronic Control Units (ECUs) communicating through the **CAN (Controller Area Network) Protocol**.
 
-The main objectives of the project are:
+In conventional parking systems, drivers spend more time searching for available parking spaces, which increases fuel consumption and traffic congestion. This project provides an intelligent solution by detecting vehicle presence in parking slots and displaying real-time parking availability.
 
-    To detect vehicles entering and leaving parking slots automatically.
+The system uses sensors to detect whether a parking slot is occupied or free. The collected information is processed by microcontrollers and transmitted between different nodes using CAN communication. This project demonstrates automotive-level communication between ECUs, similar to modern vehicle systems.
 
-    To monitor multiple parking slots in real time.
+---
 
-    To communicate parking information between multiple controllers using CAN protocol.
+# 🎯 Objectives
 
-    To display the number of available and occupied slots on an LCD.
+The main objectives of this project are:
 
-    To automatically control the parking entrance gate using a servo motor.
+- To design an automated parking monitoring system.
+- To detect vehicle presence in individual parking slots.
+- To implement communication between multiple ECUs using CAN Protocol.
+- To display real-time parking slot availability.
+- To control vehicle entry and exit automatically.
+- To understand automotive communication protocols used in real-time applications.
 
-    To record vehicle entry and exit time using an RTC.
+---
 
-    To reduce manual monitoring and improve parking management.
+# 💡 Problem Statement
 
-3. System Architecture
+In traditional parking systems:
 
-The system consists of three LPC2129-based nodes connected through a CAN communication network.
+- Drivers need to manually search for available parking spaces.
+- It consumes more time and fuel.
+- Manual monitoring requires more human effort.
+- There is no real-time information about parking availability.
 
-    Node 1: Monitors the first set of parking slots.
+To overcome these problems, this project introduces an automated parking management system that detects vehicle occupancy and communicates parking information through CAN protocol.
 
-    Node 2: Monitors the second set of parking slots.
+---
 
-    Node 3: Acts as the main monitoring/control node and manages the gate, LCD and overall parking information.
+# 🏗️ System Architecture
 
-The IR sensors detect the presence of vehicles. Each LPC2129 processes its sensor information and transmits the parking status through the CAN bus. Node 3 receives the information and updates the total parking status.
+```
+                    Parking Slot Sensors
+                            |
+                            |
+                     Vehicle Detection ECU
+                            |
+                            |
+                         CAN BUS
+                            |
+          ------------------------------------
+          |                                  |
+       ECU-1                              ECU-2
+ Slot Monitoring                    Gate Controller
+          |                                  |
+          |                                  |
+      LCD Display                      Servo Motor
+ Parking Information               Automatic Gate
+```
 
-Overall flow:
+---
 
-IR Sensors → LPC2129 Nodes → CAN Bus → Main Node → LCD / Servo Gate / RTC
-4. Node 1
+# ⚙️ Working Principle
 
-Node 1 is responsible for monitoring the parking slots assigned to the first parking section.
+### 1. Vehicle Detection
 
-IR sensors are connected to the GPIO pins of the LPC2129. When a vehicle enters a slot, the corresponding IR sensor detects the vehicle and the microcontroller identifies the slot as occupied.
+- IR sensors are placed in parking slots.
+- Sensors continuously monitor the presence of vehicles.
+- When a vehicle enters a slot, the sensor output changes.
 
-Node 1 generates a CAN message containing the parking-slot status and transmits it to the main node through the CAN transceiver.
+### 2. Data Processing
 
-Functions of Node 1:
+- The microcontroller reads sensor values.
+- It determines whether the parking slot is occupied or available.
+- The processed data is converted into CAN messages.
 
-    Read IR sensors.
+### 3. CAN Communication
 
-    Detect vehicle presence.
+- CAN protocol is used for communication between ECUs.
+- The transmitter ECU sends parking information through the CAN bus.
+- The receiver ECU receives and processes the CAN message.
 
-    Determine occupied/free slots.
+### 4. Display and Control
 
-    Generate CAN messages.
+- The parking status is displayed on the LCD.
+- If parking space is available, the gate opens automatically.
+- Servo motor is controlled based on parking availability.
 
-    Transmit slot status to Node 3.
+---
 
-5. Node 2
+# 🔌 CAN Protocol Implementation
 
-Node 2 performs the same monitoring operation for another group of parking slots.
+## What is CAN?
 
-The LPC2129 continuously reads the IR sensors connected to its parking slots. The detected information is processed and transmitted to the main controller using the CAN communication network.
+CAN (Controller Area Network) is a serial communication protocol mainly used in automotive applications for communication between Electronic Control Units (ECUs).
 
-Functions of Node 2:
+It provides:
 
-    Monitor assigned parking slots.
+- High reliability communication
+- Noise immunity
+- Multi-node communication
+- Fast data transfer
+- Error detection mechanism
 
-    Detect vehicle presence using IR sensors.
+---
 
-    Process sensor information.
+## CAN Communication in This Project
 
-    Send parking status through CAN.
+In this project:
 
-    Update the main controller about slot availability.
+- Multiple microcontroller nodes communicate through CAN.
+- Vehicle detection data is transmitted as CAN frames.
+- The receiving ECU interprets the message and updates the parking status.
 
-6. Node 3
+Example:
 
-Node 3 acts as the main control and monitoring node of the system.
+```
+CAN Message:
 
-It receives parking information from Node 1 and Node 2 through CAN communication. It combines the received information with its own sensor information to determine the overall parking status.
+ID        DATA
 
-Node 3 controls the LCD display and servo motor. If parking spaces are available, the gate can be opened when a vehicle approaches. If all slots are occupied, the system can prevent entry and display a "PARKING FULL" message.
+0x101     SLOT 1 OCCUPIED
+0x102     SLOT 2 AVAILABLE
+0x103     SLOT 3 OCCUPIED
+```
 
-The RTC is used to maintain the current date and time for recording vehicle entry and exit events.
-7. What Is Implemented
+---
 
-The following features are implemented in the project:
+# 🔧 Hardware Components Used
 
-    Multiple parking-slot monitoring.
+## 1. LPC21xx Microcontroller
 
-    Vehicle detection using IR sensors.
+- ARM7 based microcontroller.
+- Used for processing sensor data and CAN communication.
+- Controls LCD, sensors, and servo motor.
 
-    Three LPC2129 microcontroller nodes.
+---
 
-    CAN-based communication between nodes.
+## 2. CAN Transceiver
 
-    Parking-slot occupancy calculation.
+- Provides physical layer communication between microcontroller and CAN bus.
+- Converts logic signals into CAN differential signals.
 
-    LCD-based parking-status display.
+---
 
-    Automatic gate control using a servo motor.
+## 3. IR Sensors
 
-    RTC-based time monitoring.
+- Used for detecting vehicle presence.
+- Provides digital output based on obstacle detection.
 
-    Centralized parking information management.
+---
 
-    Real-time communication between parking nodes.
+## 4. LCD Display
 
-8. Working Principle
+- Displays parking slot information.
+- Shows available and occupied slots.
 
-When a vehicle approaches the parking system, the IR sensors detect its presence.
+Example:
 
-    The IR sensor produces a digital signal depending on whether a vehicle is present.
+```
+SMART PARKING
 
-    The corresponding LPC2129 reads the sensor status.
+SLOT 1 : FULL
+SLOT 2 : EMPTY
+SLOT 3 : FULL
+```
 
-    The node determines whether the parking slot is occupied or free.
+---
 
-    The slot information is packed into a CAN data frame.
+## 5. Servo Motor
 
-    The CAN transceiver transfers the data through the CAN bus.
+- Used for automatic gate control.
+- Opens when parking space is available.
+- Closes when parking slots are full.
 
-    Node 3 receives the information from the other nodes.
+---
 
-    Node 3 calculates the total number of occupied and available slots.
+## 6. LEDs
 
-    The parking status is displayed on the LCD.
+- Indicate parking slot status.
 
-    If space is available, the servo motor operates the entrance gate.
+Green LED  → Available Slot
 
-    The RTC provides the current time for vehicle entry/exit monitoring.
+Red LED → Occupied Slot
 
-9. Block Diagram
+---
 
-              ┌───────────────────┐
-              │    IR Sensors     │
-              │    Parking Area 1 │
-              └─────────┬─────────┘
-                        │
-                        ▼
-                ┌──────────────┐
-                │   NODE 1     │
-                │   LPC2129    │
-                └──────┬───────┘
-                       │
-                       │ CAN
-                       │
-                       ▼
-        ╔══════════════════════════════╗
-        ║          CAN BUS             ║
-        ╚══════════════════════════════╝
-                       │
-              ┌────────┴────────┐
-              │                 │
-              ▼                 ▼
-       ┌──────────────┐  ┌──────────────┐
-       │   NODE 2     │  │   NODE 3     │
-       │   LPC2129    │  │   LPC2129    │
-       └──────┬───────┘  └──────┬───────┘
-              │                 │
-              │                 ├──────────► LCD
-              │                 │
-              │                 ├──────────► Servo Motor
-              │                 │
-              │                 └──────────► RTC
-              │
-              ▼
-       ┌─────────────────┐
-       │ IR Sensors      │
-       │ Parking Area 2  │
-       └─────────────────┘
+# 💻 Software Tools Used
 
-10. Hardware Components
+| Tool | Purpose |
+|------|---------|
+| Embedded C | Firmware Development |
+| Keil µVision | Code Compilation |
+| Flash Magic | Microcontroller Programming |
+| Proteus | Simulation |
+| GitHub | Project Management |
 
-The major hardware components used are:
-LPC2129
+---
 
-ARM7-based microcontroller used as the processing unit for each parking node.
-IR Sensors
+# 📂 Project Modules
 
-Used to detect the presence or absence of vehicles in parking slots.
-CAN Transceiver
+## Module 1: Vehicle Detection Module
 
-Used to provide physical-layer communication between the LPC2129 nodes and the CAN bus. An MCP2551 can be used as the CAN transceiver.
-LCD
+Responsibilities:
 
-A 16×2 LCD is used to display parking information such as:
+- Reads sensor inputs.
+- Detects vehicle presence.
+- Sends slot status information.
 
-    Available slots
+---
 
-    Occupied slots
+## Module 2: CAN Communication Module
 
-    Parking full status
+Responsibilities:
 
-    Entry/exit information
+- CAN initialization.
+- Message transmission.
+- Message reception.
+- Data processing.
 
-Servo Motor
+---
 
-Used to control the parking entrance gate automatically.
-RTC
+## Module 3: Display Module
 
-The Real-Time Clock maintains date and time information for recording vehicle entry and exit events.
-Power Supply
+Responsibilities:
 
-Provides the required regulated voltage to the microcontrollers, sensors, CAN transceivers, LCD and other peripherals.
-11. Software Components
+- LCD initialization.
+- Display parking information.
+- Update real-time status.
 
-The software is developed using embedded C.
-Development Tools
+---
 
-    Keil µVision 4
+## Module 4: Gate Control Module
 
-    Embedded C
+Responsibilities:
 
-    LPC2129 startup code
+- Controls servo motor.
+- Allows vehicle entry based on parking availability.
 
-    Proteus for simulation
+---
 
-Software Modules
+# 🔄 Data Flow
 
-    GPIO initialization
+```
+Sensor Input
+      |
+      |
+Microcontroller Processing
+      |
+      |
+CAN Message Transmission
+      |
+      |
+Receiver ECU
+      |
+      |
+LCD Display + Gate Control
+```
 
-    IR sensor interface
+---
 
-    LCD driver
+# ✨ Features
 
-    CAN initialization
+✅ Automatic vehicle detection  
+✅ Real-time parking slot monitoring  
+✅ CAN based ECU communication  
+✅ LCD status display  
+✅ Automatic gate operation  
+✅ Automotive communication implementation  
+✅ Embedded C firmware development  
+✅ Multi-controller architecture  
 
-    CAN transmit function
+---
 
-    CAN receive function
+# 🚘 Applications
 
-    RTC driver
+This project can be implemented in:
 
-    Servo motor control
+- Smart city parking systems
+- Shopping mall parking areas
+- Office parking management
+- Automotive parking assistance systems
+- Industrial vehicle management systems
 
-    Parking-slot counting logic
+---
 
-    Main control program
+# 📈 Advantages
 
-    Delay/timer functions
+- Reduces searching time for parking spaces.
+- Minimizes fuel wastage.
+- Provides accurate parking information.
+- Reliable communication using CAN protocol.
+- Reduces manual monitoring effort.
 
-12. Communication
+---
 
-The communication between the three LPC2129 nodes is performed using the Controller Area Network (CAN) protocol.
+# 🔮 Future Enhancements
 
-Each node generates CAN messages containing parking-slot information. The CAN transceiver converts the controller's CAN signals into the electrical signals required for transmission over the CAN bus.
+Future improvements include:
 
-The main node receives the messages and processes the information.
+- IoT based remote parking monitoring.
+- Mobile application integration.
+- RFID based vehicle identification.
+- Automatic payment system.
+- Cloud database integration.
+- AI based vehicle detection using cameras.
 
-Node 1 ───────┐
-              │
-              ▼
-          CAN BUS
-              │
-              ▼
-Node 2 ───────┤──────► Node 3
-              │
-              ▼
-        Parking Status
+---
 
-CAN provides reliable multi-node communication and is suitable for embedded systems because it supports message-based communication and error detection.
-13. Project Features
+# 🧠 Skills Demonstrated
 
-    Automatic vehicle detection.
+Through this project, the following technical skills were implemented:
 
-    Multiple parking-slot monitoring.
+- Embedded C Programming
+- ARM7 Microcontroller Programming
+- GPIO Interfacing
+- LCD Interfacing
+- Sensor Interfacing
+- CAN Protocol Communication
+- ECU Based System Design
+- Debugging and Testing
 
-    Three-node distributed architecture.
+---
 
-    CAN-based communication.
+# 👨‍💻 Developed By
 
-    Real-time parking-status monitoring.
+## Vasanth Kumar R
 
-    Automatic gate control.
+**Electronics and Communication Engineering (ECE)**  
+Embedded Systems Engineer
 
-    LCD status display.
+GitHub Profile:
 
-    RTC-based time monitoring.
+https://github.com/vasanthraj6069
 
-    Centralized parking management.
 
-    Reduced human intervention.
+---
 
-    Suitable for embedded-system applications.
+# ⭐ Conclusion
 
-14. Advantages
+The **Smart Parking Slot Monitoring and Vehicle Detection System Using CAN Protocol** successfully demonstrates an automotive embedded application where multiple ECUs communicate efficiently using CAN technology.
 
-    Reduces manual work: Parking slots can be monitored automatically.
-
-    Real-time monitoring: Slot status can be updated continuously.
-
-    Reliable communication: CAN provides robust communication between nodes.
-
-    Scalable architecture: Additional nodes and parking slots can be added.
-
-    Automatic gate control: Reduces the need for manual gate operation.
-
-    Low-cost implementation: Uses commonly available embedded-system components.
-
-    Improved parking efficiency: Drivers can identify available parking spaces quickly.
-
-    Fault detection: CAN provides built-in error detection mechanisms.
-
-15. Applications
-
-The system can be used in:
-
-    Shopping malls
-
-    IT parks
-
-    Colleges and universities
-
-    Hospitals
-
-    Airports
-
-    Railway stations
-
-    Office parking areas
-
-    Apartment complexes
-
-    Smart-city parking systems
-
-    Industrial parking areas
-
-16. Future Scope
-
-The project can be further improved by adding advanced features such as:
-
-    IoT connectivity for remote parking monitoring.
-
-    Mobile application to display available parking slots.
-
-    Cloud database for storing parking records.
-
-    RFID-based vehicle identification.
-
-    Automatic number plate recognition (ANPR).
-
-    Online parking-slot reservation.
-
-    Payment and billing system.
-
-    Web-based parking management dashboard.
-
-    Camera-based vehicle detection.
-
-    AI-based parking prediction.
-
-    Integration with smart-city infrastructure.
-
-    Expansion to a larger number of parking nodes and slots.
-
-17. Conclusion
-
-The Smart Parking Slot Monitoring and Vehicle Detection System using CAN Protocol provides an automated and reliable method for managing parking spaces. The combination of LPC2129 microcontrollers, IR sensors, CAN communication, LCD, RTC and servo motor enables real-time monitoring, vehicle detection and automatic gate control. The modular three-node architecture also provides a foundation for expanding the system into a larger IoT-enabled smart parking solution.
-
-
+This project provides practical knowledge of embedded programming, communication protocols, sensor interfacing, and real-time control systems, which are essential concepts in the automotive embedded industry.

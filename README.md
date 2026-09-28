@@ -323,14 +323,14 @@ Through this project, the following technical skills were implemented:
 
 # 👨‍💻 Developed By
 
-## Vasanth Kumar R
+## YUKESH S
 
 **Electronics and Communication Engineering (ECE)**  
 Embedded Systems Engineer
 
 GitHub Profile:
 
-https://github.com/vasanthraj6069
+https://github.com/Yukesh777
 
 
 ---
